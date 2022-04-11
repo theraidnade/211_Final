@@ -1,0 +1,25 @@
+Phillip Dickey
+Professor Mengistu
+CS 211H
+10 April 2022
+
+	Project Progress Report
+Group:
+	Group Members: Phillip Dickey & Musa Hassan
+	Team Leader: Phillip Dickey
+Project Goals and Progress:
+	Project Goal: Creation of an application that can scrape the price data from websites and conveniently present which location contains the lowest prices alongside the average price 	and lowest price on the various non-lowest websites.  The application will have a full graphical user interface and accept user input in the form of item keywords, minimum and 	maximum price ranges, and which websites to scrape.
+	Group Progress: All members of the group have begun familiarizing themselves with the jsoup java library.  Furthermore, the usage of html, selectors, for-each loops using Element and 	Elements objects, and Document objects has been attempted and put into practice.  Although primitive, the uploaded code on GitHub is substantial and with time put towards creating 	the graphical user interface, and ironing out the bugs that are present, a fully functional project can be finalized.  
+
+
+
+Completed and Remaining Work:
+	Completed Work:
+	•	Creation of initial web scrapers
+	•	Familiarization with needed libraries and coding principles
+	Remaining Work:
+	•	Duplication of web scraper functionality across more websites such as eBay, Walmart, and Craigslist
+	•	Creation and implementation of graphical user interface
+	•	Debugging and finalizing of current web scraper logic and code
+	•	Creation of master class that will utilize the individual scraper and GUI classes
+
