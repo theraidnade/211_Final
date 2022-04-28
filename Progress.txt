@@ -35,7 +35,7 @@ Completed and Remaining Work:
 	•	Progression of scraper functionality
 	Remaining Work:
 	•	Duplication of web scraper functionality across more websites such as Walmart, and Craigslist
-	•	<strike>Creation and implementation of graphical user interface</strike>
-	•	Further debugging <strike>Debugging and finalizing of current web scraper logic and code</strike>
-	•	<strike>Creation of master class that will utilize the individual scraper and GUI classes</strike>
+	•	~~Creation and implementation of graphical user interface~~
+	•	Further debugging ~~Debugging and finalizing of current web scraper logic and code~~
+	•	~~Creation of master class that will utilize the individual scraper and GUI classes~~
 
