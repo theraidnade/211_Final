@@ -1,4 +1,5 @@
 package scraperPackage;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.Jsoup;
@@ -8,24 +9,55 @@ import org.jsoup.select.Elements;
 
 public class AmazonScraper {
 	
+	public static double getAverage(List<String> items) {
+		if (items.size() == 0 || items == null) {
+			return -1;
+		}
+		DecimalFormat avgFormat = new DecimalFormat("#.00");
+		int numItems = items.size()/3;
+		double tempPrice = 0.0;
+		double averageCost = 0.0;
+		for (int i = 0; i < items.size(); i = i+3) {
+			tempPrice += Double.parseDouble(items.get(i+1));
+		}
+		averageCost = tempPrice/numItems;
+		return Double.parseDouble(avgFormat.format(averageCost));
+	}
+	
+	public static String[] getLowest(List<String> items) {
+		if (items.size() == 0 || items == null) {
+			return null;
+		}
+		double lowVal = Double.MAX_VALUE;
+		int minIndex = 0;
+		for (int i = 0; i < items.size(); i = i+3) {
+			if (Double.parseDouble(items.get(i+1)) < lowVal) {
+				minIndex = i;
+				lowVal = Double.parseDouble(items.get(i+1));
+			}
+		}
+		String[] returnArray = {items.get(minIndex), items.get(minIndex+1), items.get(minIndex+2)};
+		return returnArray;
+	}
+	
 	public static List<String> getItems(String keyword, int minPrice, int maxPrice){
 		ArrayList<String> productList = new ArrayList<String>();
 		keyword = keyword.replace(' ', '+');
 		String productURL = "";
 		if (minPrice == 0 && maxPrice == 0) {
-			productURL = String.format("https://www.amazon.com/s?k=%s&s=price-asc-rank&page=", keyword);
+			productURL = String.format("https://www.amazon.com/s?k=%s&page=", keyword);
 		}
 		else if (minPrice != 0 && maxPrice == 0) {
-			productURL = String.format("https://www.amazon.com/s?k=%s&s=price-asc-rank&low-price=%s&page=", keyword, String.valueOf(minPrice));
+			productURL = String.format("https://www.amazon.com/s?k=%s&low-price=%s&page=", keyword, String.valueOf(minPrice));
 		}
 		else if (minPrice == 0 && maxPrice != 0) {
-			productURL = String.format("https://www.amazon.com/s?k=%s&s=price-asc-rank&high-price=%s&page=", keyword, String.valueOf(maxPrice));
+			productURL = String.format("https://www.amazon.com/s?k=%s&high-price=%s&page=", keyword, String.valueOf(maxPrice));
 		}
 		else {
-			productURL = String.format("https://www.amazon.com/s?k=%s&s=price-asc-rank&low-price=%s&high-price=%s&page=", keyword, String.valueOf(minPrice), String.valueOf(maxPrice));
+			productURL = String.format("https://www.amazon.com/s?k=%s&low-price=%s&high-price=%s&page=", keyword, String.valueOf(minPrice), String.valueOf(maxPrice));
 		}		for (int urlPage = 1; urlPage < 11; urlPage++) {
 			try {
-				Document amazonData = Jsoup.connect(productURL.concat(String.valueOf(urlPage))).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36").ignoreHttpErrors(true).referrer("http://www.google.com").timeout(20000000).followRedirects(true).get();
+				Document amazonData = Jsoup.connect(productURL.concat(String.valueOf(urlPage))).userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.38 Safari/537.36").ignoreHttpErrors(true).referrer("http://www.google.com").timeout(20000000).followRedirects(true).get();
 				Elements productsInfo = amazonData.select(".sg-col-inner");
 				for (Element listingInfo : productsInfo) {
 					if (!(listingInfo.select(".a-size-medium.a-color-base.a-text-normal").text().equals(""))) {
@@ -71,24 +103,22 @@ public class AmazonScraper {
 						}
 					}
 				}
-				for (int index = 0; index < productList.size() - 3; index = index + 3) {
-					System.out.println(productList.get(index) + ": " + productList.get(index + 1));
-					System.out.println(productList.get(index + 2));
-					System.out.println();
-				}
-				System.out.println("////////////////////////");
-				System.out.println(productList.size());
 			}
 			catch (Exception scrapeFail) {
 				scrapeFail.printStackTrace();
 			}
 		}
-		System.out.println(productList);
 		return productList;
 	}
 
 	public static void main(String[] args) {
-		getItems("rtx 3090", 700, 2000);
+		List<String> tempList = getItems("cheese", 2, 2000);
+		System.out.println(tempList);
+		System.out.println(getAverage(tempList));
+		String[] tempStrings = getLowest(tempList);
+		for (String string: tempStrings) {
+			System.out.println(string);
+		}
 	}
 
 }
