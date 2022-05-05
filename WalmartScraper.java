@@ -1,4 +1,5 @@
 package scraperPackage;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.Jsoup;
@@ -7,22 +8,53 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class WalmartScraper {
+	
+	public static double getAverage(List<String> items) {
+		if (items.size() == 0 || items == null) {
+			return -1;
+		}
+		DecimalFormat avgFormat = new DecimalFormat("#.00");
+		int numItems = items.size()/3;
+		double tempPrice = 0.0;
+		double averageCost = 0.0;
+		for (int i = 0; i < items.size(); i = i+3) {
+			tempPrice += Double.parseDouble(items.get(i+1));
+		}
+		averageCost = tempPrice/numItems;
+		return Double.parseDouble(avgFormat.format(averageCost));
+	}
+	
+	public static String[] getLowest(List<String> items) {
+		if (items.size() == 0 || items == null) {
+			return null;
+		}
+		double lowVal = Double.MAX_VALUE;
+		int minIndex = 0;
+		for (int i = 0; i < items.size(); i = i+3) {
+			if (Double.parseDouble(items.get(i+1)) < lowVal) {
+				minIndex = i;
+				lowVal = Double.parseDouble(items.get(i+1));
+			}
+		}
+		String[] returnArray = {items.get(minIndex), items.get(minIndex+1), items.get(minIndex+2)};
+		return returnArray;
+	}
 
 	public static List<String> getItems(String keyword, int minPrice, int maxPrice){
 		ArrayList<String> productList = new ArrayList<String>();
 		keyword = keyword.replace(' ', '+');
 		String productURL = "";
 		if (minPrice == 0 && maxPrice == 0) {
-			productURL = String.format("https://www.walmart.com/search?q=%s&sort=price_low&page=", keyword);
+			productURL = String.format("https://www.walmart.com/search?q=%s&page=", keyword);
 		}
 		else if (minPrice != 0 && maxPrice == 0) {
-			productURL = String.format("https://www.walmart.com/search?q=%s&sort=price_low&min_price=%s&page=", keyword, String.valueOf(minPrice));
+			productURL = String.format("https://www.walmart.com/search?q=%s&min_price=%s&page=", keyword, String.valueOf(minPrice));
 		}
 		else if (minPrice == 0 && maxPrice != 0) {
-			productURL = String.format("https://www.walmart.com/search?q=%s&sort=price_low&max_price=%s&page=", keyword, String.valueOf(maxPrice));
+			productURL = String.format("https://www.walmart.com/search?q=%s&max_price=%s&page=", keyword, String.valueOf(maxPrice));
 		}
 		else {
-			productURL = String.format("https://www.walmart.com/search?q=%s&sort=price_low&min_price=%s&max_price=%s&page=", keyword, String.valueOf(minPrice), String.valueOf(maxPrice));
+			productURL = String.format("https://www.walmart.com/search?q=%s&min_price=%s&max_price=%s&page=", keyword, String.valueOf(minPrice), String.valueOf(maxPrice));
 		}
 		for (int urlPage = 1; urlPage < 10; urlPage++) {
 			try {
@@ -75,23 +107,22 @@ public class WalmartScraper {
 						}
 					}
 				}
-				for (int index = 0; index < productList.size() - 3; index = index + 3) {
-					System.out.println(productList.get(index) + ": " + productList.get(index+1));
-					System.out.println(productList.get(index+2));
-					System.out.println();
-				}
 			}
 			catch (Exception scrapeFail) {
 				scrapeFail.printStackTrace();
 			}
 		}
-		System.out.println(productList);
 		return productList;
 	}
 
 
 	public static void main(String[] args) {
-		getItems("grand piano", 1000, 4000);
+		List<String> testList = getItems("vibrators", 10, 200);
+		System.out.println(getAverage(testList));
+		String[] tempString = getLowest(testList);
+		for (String part: tempString) {
+			System.out.println(part);
+		}
 	}
 
 }
