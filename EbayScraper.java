@@ -16,6 +16,7 @@ public class Scraper {
 	}
 	public static void getItems(String keyword, int min, int max) throws IOException, MinMaxException {
 		double all = 0;
+		String temp;
 		double number = 0;
 		String URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=%s&_sacat=0&_ipg=240&rt=nc&LH_BIN=1", keyword);
 		ArrayList<String> products = new ArrayList<String>();
@@ -45,17 +46,19 @@ public class Scraper {
 					continue;
 				}
 				
-				products.add("1." + price.select(".s-item__title").text());
+				products.add(price.select(".s-item__title").text());
 				number = number + 1;
-				Element links = price.select("a").first();
-				String url = links.attr("href");
 				if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("Free shipping")) {
-					products.add("3." + price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					products.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
 					all = all + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
 				}
 				else if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("")) {
-					products.add("3." + price.select(".s-item__price").text().replace("$", "").replace(",", ""));
-					all = all + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					products.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" "))
+					{
+						temp = price.select(".s-item__price").text().replace("$", "").replace(",", "");
+						all = all + Double.parseDouble(temp.substring(0, temp.indexOf(" ")));
+					}
 				}
 				else {
 					String post = price.select(".s-item__shipping.s-item__logisticsCost").text().replace("+$", "").replace(",", "");
@@ -69,11 +72,13 @@ public class Scraper {
 					double dpost = Double.parseDouble(post);
 					double total = pre + dpost;
 					String totalString = String.valueOf(total);	
-					products.add("3." + totalString);
+					products.add(totalString);
 					all = all + Double.parseDouble(totalString);
 
 				}
-				products.add("2." + url);
+				Element links = price.select("a").first();
+				String url = links.attr("href");
+				products.add(url);
 			}
 			if(products.size() > 0) {
 			cheapest.add(products.get(0));
@@ -81,17 +86,6 @@ public class Scraper {
 			cheapest.add(products.get(2));
 			average = all / number;
 			}
-			for (int i = 0; i < products.size() - 3; i++) {
-				System.out.println(products.get(i));
-				System.out.println(products.get(i + 1));
-				System.out.println(products.get(i + 2));
-				}
-			}
-			//https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=phone&_sacat=0
-			//https://www.ebay.com/sch/i.html?_from=R40&_nkw=phone&_sacat=0&rt=nc&_udhi=60
-		
-	public static void main(String[] args) throws IOException, MinMaxException {
-		getItems("rtx 3060", 0, 500);
 	}
 	
 		}
