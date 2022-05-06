@@ -49,7 +49,6 @@ public class Scraper {
 				number = number + 1;
 				Element links = price.select("a").first();
 				String url = links.attr("href");
-				products.add("2." + url);
 				if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("Free shipping")) {
 					products.add("3." + price.select(".s-item__price").text().replace("$", "").replace(",", ""));
 					all = all + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
@@ -74,6 +73,7 @@ public class Scraper {
 					all = all + Double.parseDouble(totalString);
 
 				}
+				products.add("2." + url);
 			}
 			if(products.size() > 0) {
 			cheapest.add(products.get(0));
