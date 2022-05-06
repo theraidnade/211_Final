@@ -1,21 +1,23 @@
+package scraperPackage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Craigslist {
+public class CraigslistScraper {
 	public static double average;
-	public static ArrayList<String> cheapest = new ArrayList<String>();
-	public static ArrayList<String> getLowest() throws IOException {
+	public static String[] cheapest = new String[3];
+	public static String[] getLowest(List<String> items) throws IOException {
 		return cheapest;
 	}
-	public static double getAverage() {
+	public static double getAverage(List<String> items) {
 		return average;
 	}
-	public static void getItems(String keyword, int min, int max) throws IOException {
+	public static List<String> getItems(String keyword, int min, int max) throws IOException {
 		double all = 0;
 		double number = 0;
 		ArrayList<String> products = new ArrayList<String>();
@@ -42,7 +44,7 @@ public class Craigslist {
 				if(price.toString().contains("broken") || price.toString().toLowerCase().contains("for parts") || price.toString().toLowerCase().contains("parts")|| price.toString().toLowerCase().contains("defective")) {
 					continue;
 				}
-				if(price.select(".result-price").text().replace("$", "").replace(",", "").equals("")) {
+				if(price.select(".result-price").text().replace("$", "").replace(",", "").equals("") || price.select(".result-price").text().replace("$", "").replace(",", "").equals("0") || price.select(".result-price").text().replace("$", "").replace(",", "").equals("1") || price.select(".result-price").text().replace("$", "").replace(",", "") == null) {
 					continue;
 				}
 				if(Double.parseDouble(price.select(".result-price").text().replace("$", "").replace(",", "")) > max || Double.parseDouble(price.select(".result-price").text().replace("$", "").replace(",", "")) < min) {
@@ -60,12 +62,12 @@ public class Craigslist {
 				
 			}
 			if(products.size() > 0) {
-			cheapest.add(products.get(0));
-			cheapest.add(products.get(1));
-			cheapest.add(products.get(2));
+			cheapest[0] = products.get(0);
+			cheapest[1] = products.get(1);
+			cheapest[2] = products.get(2);
 			}
-			average = all / number;	
+			average = all / number;
+			return products;
 		}
 	
 	}
-
