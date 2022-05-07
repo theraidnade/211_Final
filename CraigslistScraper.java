@@ -25,7 +25,7 @@ public class CraigslistScraper {
 		String URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58", keyword);
 		if(min == 0 && max == 0) {
 		URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58", keyword);
-
+		max = Integer.MAX_VALUE;
 		}else if(min != 0 && max != 0){
 			URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58&min_price=5555&max_price=15000", keyword);
 			URL = URL.replaceFirst("5555", Integer.toString(min));
@@ -67,6 +67,7 @@ public class CraigslistScraper {
 			cheapest[2] = products.get(2);
 			}
 			average = all / number;
+			System.out.println(products);
 			return products;
 		}
 	
