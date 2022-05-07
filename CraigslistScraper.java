@@ -1,4 +1,3 @@
-package scraperPackage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,19 +7,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class CraigslistScraper {
-	public static double average;
-	public static String[] cheapest = new String[3];
+public class Craigslist {
+	public static double averagePrice;
+	public static String[] cheapestItem = new String[3];
 	public static String[] getLowest(List<String> items) throws IOException {
-		return cheapest;
+		return cheapestItem;
 	}
 	public static double getAverage(List<String> items) {
-		return average;
+		return averagePrice;
 	}
 	public static List<String> getItems(String keyword, int min, int max) throws IOException {
-		double all = 0;
-		double number = 0;
-		ArrayList<String> products = new ArrayList<String>();
+		double TotalPrice = 0;
+		double number_of_listings = 0;
+		ArrayList<String> productsListings = new ArrayList<String>();
 		keyword = keyword.replace(" ", "+");
 		String URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58", keyword);
 		if(min == 0 && max == 0) {
@@ -52,23 +51,22 @@ public class CraigslistScraper {
 				}
 				Element title = price.select("a").first();
 				String name = title.select("a").first().text();
-				products.add(name);
-				number = number + 1;
-				products.add(price.select(".result-price").text().replace("$", "").replace(",", ""));
-				all = all + Double.parseDouble(price.select(".result-price").text().replace("$", "").replace(",", ""));
+				productsListings.add(name);
+				number_of_listings = number_of_listings + 1;
+				productsListings.add(price.select(".result-price").text().replace("$", "").replace(",", ""));
+				TotalPrice = TotalPrice + Double.parseDouble(price.select(".result-price").text().replace("$", "").replace(",", ""));
 				Element links = price.select("a").first();
 				String url = links.attr("href");
-				products.add(url);
+				productsListings.add(url);
 				
 			}
-			if(products.size() > 0) {
-			cheapest[0] = products.get(0);
-			cheapest[1] = products.get(1);
-			cheapest[2] = products.get(2);
+			if(productsListings.size() > 0) {
+			cheapestItem[0] = productsListings.get(0);
+			cheapestItem[1] = productsListings.get(1);
+			cheapestItem[2] = productsListings.get(2);
 			}
-			average = all / number;
-			System.out.println(products);
-			return products;
+			averagePrice = TotalPrice / number_of_listings;
+			return productsListings;
 		}
 	
 	}
