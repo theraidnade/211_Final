@@ -1,31 +1,33 @@
+package scraperPackage;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
-public class Scraper {
+public class EbayScraper {
 	public static double average;
-	public static ArrayList<String> cheapest = new ArrayList<String>();
-	public static ArrayList<String> getLowest() throws IOException {
+	public static String[] cheapest = new String[3];
+	public static String[] getLowest(List<String> items) throws IOException {
 		return cheapest;
 	}
-	public static double getAverage() {
+	public static double getAverage(List<String> items) {
 		return average;
 	}
-	public static void getItems(String keyword, int min, int max) throws IOException, MinMaxException {
+	public static ArrayList<String> getItems(String keyword, int min, int max) throws IOException{
 		double all = 0;
+		String temp1;
 		String temp;
 		double number = 0;
 		String URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=%s&_sacat=0&_ipg=240&rt=nc&LH_BIN=1", keyword);
 		ArrayList<String> products = new ArrayList<String>();
 		keyword = keyword.replace(" ", "+");
-		if(min > max) {
-			throw new MinMaxException("Minimum Price Must be Less Than Maximum Pice");
-		}
 		if(min == 0 && max == 0) {
 			URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=%s&_sacat=0&_ipg=240&rt=nc&LH_BIN=1", keyword);
+			max = Integer.MAX_VALUE;
 			}
 		else if(min != 0 && max != 0){
 			URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_nkw=%s&_sacat=0&LH_TitleDesc=0&_udlo=150&rt=nc&_udhi=15000", keyword);
@@ -50,11 +52,17 @@ public class Scraper {
 				number = number + 1;
 				if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("Free shipping")) {
 					products.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
-					all = all + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" ")) {
+						temp1 = price.select(".s-item__price").text().replace("$", "").replace(",", "").substring(0, price.select(".s-item__price").text().replace("$", "").replace(",", "").indexOf(" "));
+						all = all + Double.parseDouble(temp1);
+					}
+					else {
+						all = all + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					}
 				}
 				else if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("")) {
 					products.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
-					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" "))
+					if(price.select(".s-item__price").first().text().replace("$", "").replace(",", "").contains(" "))
 					{
 						temp = price.select(".s-item__price").text().replace("$", "").replace(",", "");
 						all = all + Double.parseDouble(temp.substring(0, temp.indexOf(" ")));
@@ -81,11 +89,12 @@ public class Scraper {
 				products.add(url);
 			}
 			if(products.size() > 0) {
-			cheapest.add(products.get(0));
-			cheapest.add(products.get(1));
-			cheapest.add(products.get(2));
+			cheapest[0] = products.get(0);
+			cheapest[1] = products.get(1);
+			cheapest[2] = products.get(2);
 			average = all / number;
 			}
+			return products;
 	}
 	
 		}
