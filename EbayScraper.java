@@ -1,6 +1,7 @@
-package scraperPackage;
+
 import org.jsoup.nodes.Document;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,22 +9,46 @@ import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
-public class EbayScraper {
-	public static double average;
-	public static String[] cheapest = new String[3];
-	public static String[] getLowest(List<String> items) throws IOException {
-		return cheapest;
+public class Scraper {
+	public static double averagePrice;
+	public static String[] cheapestItem = new String[3];
+	public static String[] getLowest(List<String> listings) throws IOException {
+		if (listings.size() == 0 || listings == null) {
+			return null;
+		}
+		double lowVal = Double.MAX_VALUE;
+		int minimumIndex = 0;
+		for (int j = 0; j < listings.size(); j = j+3) {
+			if (Double.parseDouble(listings.get(j+1)) < lowVal) {
+				minimumIndex = j;
+				lowVal = Double.parseDouble(listings.get(j+1));
+			}
+		}
+		String[] returnArray = {listings.get(minimumIndex), listings.get(minimumIndex+1), listings.get(minimumIndex+2)};
+		return returnArray;
 	}
-	public static double getAverage(List<String> items) {
-		return average;
+	public static double getAverage(List<String> listings) {
+		if (listings.size() == 0 || listings == null) {
+			return -1;
+		}
+		DecimalFormat avgFormat = new DecimalFormat("#.00");
+		int number_of_items = listings.size()/3;
+		double Temporary_Total = 0.0;
+		double Average_Price = 0.0;
+		for (int i = 0; i < listings.size(); i = i+3) {
+			Temporary_Total += Double.parseDouble(listings.get(i+1));
+		}
+		Average_Price = Temporary_Total/number_of_items;
+		return Double.parseDouble(avgFormat.format(Average_Price));
 	}
+	
 	public static ArrayList<String> getItems(String keyword, int min, int max) throws IOException{
-		double all = 0;
-		String temp1;
-		String temp;
-		double number = 0;
+		double TotalPrice = 0;
+		String delete_string;
+		String delete_string2;
+		double number_of_listings = 0;
 		String URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=%s&_sacat=0&_ipg=240&rt=nc&LH_BIN=1", keyword);
-		ArrayList<String> products = new ArrayList<String>();
+		ArrayList<String> productsListings = new ArrayList<String>();
 		keyword = keyword.replace(" ", "+");
 		if(min == 0 && max == 0) {
 			URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=%s&_sacat=0&_ipg=240&rt=nc&LH_BIN=1", keyword);
@@ -48,24 +73,24 @@ public class EbayScraper {
 					continue;
 				}
 				
-				products.add(price.select(".s-item__title").text());
-				number = number + 1;
+				productsListings.add(price.select(".s-item__title").text());
+				number_of_listings = number_of_listings + 1;
 				if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("Free shipping")) {
-					products.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					productsListings.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
 					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" ")) {
-						temp1 = price.select(".s-item__price").text().replace("$", "").replace(",", "").substring(0, price.select(".s-item__price").text().replace("$", "").replace(",", "").indexOf(" "));
-						all = all + Double.parseDouble(temp1);
+						delete_string = price.select(".s-item__price").text().replace("$", "").replace(",", "").substring(0, price.select(".s-item__price").text().replace("$", "").replace(",", "").indexOf(" "));
+						TotalPrice = TotalPrice + Double.parseDouble(delete_string);
 					}
 					else {
-						all = all + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+						TotalPrice = TotalPrice + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
 					}
 				}
 				else if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("")) {
-					products.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					productsListings.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
 					if(price.select(".s-item__price").first().text().replace("$", "").replace(",", "").contains(" "))
 					{
-						temp = price.select(".s-item__price").text().replace("$", "").replace(",", "");
-						all = all + Double.parseDouble(temp.substring(0, temp.indexOf(" ")));
+						delete_string2 = price.select(".s-item__price").text().replace("$", "").replace(",", "");
+						TotalPrice = TotalPrice + Double.parseDouble(delete_string2.substring(0, delete_string2.indexOf(" ")));
 					}
 				}
 				else {
@@ -80,21 +105,25 @@ public class EbayScraper {
 					double dpost = Double.parseDouble(post);
 					double total = pre + dpost;
 					String totalString = String.valueOf(total);	
-					products.add(totalString);
-					all = all + Double.parseDouble(totalString);
+					productsListings.add(totalString);
+					TotalPrice = TotalPrice + Double.parseDouble(totalString);
 
 				}
 				Element links = price.select("a").first();
 				String url = links.attr("href");
-				products.add(url);
+				productsListings.add(url);
 			}
-			if(products.size() > 0) {
-			cheapest[0] = products.get(0);
-			cheapest[1] = products.get(1);
-			cheapest[2] = products.get(2);
-			average = all / number;
+			if(productsListings.size() > 0) {
+			cheapestItem[0] = productsListings.get(0);
+			cheapestItem[1] = productsListings.get(1);
+			cheapestItem[2] = productsListings.get(2);
+			averagePrice = TotalPrice / number_of_listings;
 			}
-			return products;
+			System.out.println(TotalPrice);
+			return productsListings;
+	}
+	public static void main(String[] args) throws IOException {
+		System.out.println(getItems("s10", 150, 215));
 	}
 	
 		}
