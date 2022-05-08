@@ -1,17 +1,13 @@
-
 import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
 public class Scraper {
-	public static double averagePrice;
-	public static String[] cheapestItem = new String[3];
 	public static String[] getLowest(List<String> listings) throws IOException {
 		if (listings.size() == 0 || listings == null) {
 			return null;
@@ -32,21 +28,23 @@ public class Scraper {
 			return -1;
 		}
 		DecimalFormat avgFormat = new DecimalFormat("#.00");
+		String place_holder_for_delete;
 		int number_of_items = listings.size()/3;
 		double Temporary_Total = 0.0;
 		double Average_Price = 0.0;
 		for (int i = 0; i < listings.size(); i = i+3) {
+			if(listings.get(i+1).contains(" ")) {
+				place_holder_for_delete = listings.get(i+1);
+				Temporary_Total += Double.parseDouble(place_holder_for_delete.substring(0, place_holder_for_delete.indexOf(" ")));
+			}else {
 			Temporary_Total += Double.parseDouble(listings.get(i+1));
+			}
 		}
 		Average_Price = Temporary_Total/number_of_items;
 		return Double.parseDouble(avgFormat.format(Average_Price));
 	}
 	
 	public static ArrayList<String> getItems(String keyword, int min, int max) throws IOException{
-		double TotalPrice = 0;
-		String delete_string;
-		String delete_string2;
-		double number_of_listings = 0;
 		String URL = String.format("https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313&_nkw=%s&_sacat=0&_ipg=240&rt=nc&LH_BIN=1", keyword);
 		ArrayList<String> productsListings = new ArrayList<String>();
 		keyword = keyword.replace(" ", "+");
@@ -74,24 +72,11 @@ public class Scraper {
 				}
 				
 				productsListings.add(price.select(".s-item__title").text());
-				number_of_listings = number_of_listings + 1;
 				if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("Free shipping")) {
 					productsListings.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
-					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" ")) {
-						delete_string = price.select(".s-item__price").text().replace("$", "").replace(",", "").substring(0, price.select(".s-item__price").text().replace("$", "").replace(",", "").indexOf(" "));
-						TotalPrice = TotalPrice + Double.parseDouble(delete_string);
-					}
-					else {
-						TotalPrice = TotalPrice + Double.parseDouble(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
-					}
 				}
 				else if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("")) {
 					productsListings.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
-					if(price.select(".s-item__price").first().text().replace("$", "").replace(",", "").contains(" "))
-					{
-						delete_string2 = price.select(".s-item__price").text().replace("$", "").replace(",", "");
-						TotalPrice = TotalPrice + Double.parseDouble(delete_string2.substring(0, delete_string2.indexOf(" ")));
-					}
 				}
 				else {
 					String post = price.select(".s-item__shipping.s-item__logisticsCost").text().replace("+$", "").replace(",", "");
@@ -106,24 +91,17 @@ public class Scraper {
 					double total = pre + dpost;
 					String totalString = String.valueOf(total);	
 					productsListings.add(totalString);
-					TotalPrice = TotalPrice + Double.parseDouble(totalString);
 
 				}
 				Element links = price.select("a").first();
 				String url = links.attr("href");
 				productsListings.add(url);
-			}
-			if(productsListings.size() > 0) {
-			cheapestItem[0] = productsListings.get(0);
-			cheapestItem[1] = productsListings.get(1);
-			cheapestItem[2] = productsListings.get(2);
-			averagePrice = TotalPrice / number_of_listings;
-			}
-			System.out.println(TotalPrice);
+			}	
 			return productsListings;
 	}
 	public static void main(String[] args) throws IOException {
-		System.out.println(getItems("s10", 150, 215));
+		
+		System.out.println(Craigslist.getItems("s10", 0, 0, "dc"));
 	}
 	
 		}
