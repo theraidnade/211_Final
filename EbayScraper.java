@@ -12,7 +12,7 @@ import org.jsoup.select.Elements;
  * @author Musa Hassan
  * @version 1.00
  */
-public class Scraper {
+public class EbayScraper {
 	
 	/**
 	 * Method to determine the mean cost of every item found in the getItems method
