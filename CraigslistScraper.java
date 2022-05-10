@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 // imports from jsoup and other files
-public class CraigslistScraper {
+public class Craigslist {
 	//returns the cheapest item in a String array
 	public static String[] getLowest(List<String> listings) throws IOException {
 		if (listings.size() == 0 || listings == null) { //if the listings return as an empty list then just return null because their isn't a cheapest
@@ -30,19 +30,19 @@ public class CraigslistScraper {
 		}
 		DecimalFormat avgFormat = new DecimalFormat("#.00");// for the decimal formatting
 		int number_of_items = listings.size()/3;//the list has 3 things 
-		double Temporary_Total = 0.0;
-		double Average_Price = 0.0;
-		for (int i = 0; i < listings.size(); i = i+3) {
-			Temporary_Total += Double.parseDouble(listings.get(i+1));
+		double Temporary_Total = 0.0; //used to calculate average
+		double Average_Price = 0.0; //the average variable 
+		for (int i = 0; i < listings.size(); i = i+3) { //to add the prices
+			Temporary_Total += Double.parseDouble(listings.get(i+1)); //to add the prices
 		}
-		Average_Price = Temporary_Total/number_of_items;
-		return Double.parseDouble(avgFormat.format(Average_Price));
+		Average_Price = Temporary_Total/number_of_items; //average price
+		return Double.parseDouble(avgFormat.format(Average_Price)); //return double average
 	}
 	public static List<String> getItems(String keyword, int min, int max, String location) throws IOException {
-		ArrayList<String> productsListings = new ArrayList<String>();
-		keyword = keyword.replace(" ", "+");
+		ArrayList<String> productsListings = new ArrayList<String>(); //to hold the product listings
+		keyword = keyword.replace(" ", "+"); //so that spaces are turned into plus signs for the URL
 		String URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58", keyword);
-		if(min == 0 && max == 0) {
+		if(min == 0 && max == 0) {//^ for the URL
 		URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58", keyword);
 		max = Integer.MAX_VALUE;
 		}else if(min != 0 && max != 0){
@@ -56,294 +56,292 @@ public class CraigslistScraper {
 		}else if (min != 0 && max == 0) {
 			URL = String.format("https://washingtondc.craigslist.org/search/springfield-va/sss?query=%s&lat=38.74500&lon=-77.23300&sort=priceasc&search_distance=58&min_price=15000", keyword);
 			URL = URL.replaceFirst("15000", Integer.toString(min));
+		} //the above if else statements and such are for the max prices. If they are both 0, then it doesn't matter. 
+		//if ones is 0 and one a number then the one that is a number is used while the other is ignored.
+		
+		if(location.replaceAll(" ", "").equalsIgnoreCase("location not listed")) {//location URL
+			int q = 1;
 		}
-		if(location.equals("montgomery")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("montgomery")) {
 			URL = URL.replace("washingtondc", "montgomery");
 		}
-		if(location.equals("anchorage")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("anchorage")) {
 			URL = URL.replace("washingtondc", "anchorage");
 		}
-		if(location.equals("flagstaff")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("flagstaff")) {
 			URL = URL.replace("washingtondc", "flagstaff");
 		}
-		if(location.equals("phoenix")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("phoenix")) {
 			URL = URL.replace("washingtondc", "phoenix");
 		}
-		if(location.equals("tucson")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("tucson")) {
 			URL = URL.replace("washingtondc", "tucson");
 		}
-		if(location.equals("fayar")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("fayar")) {
 			URL = URL.replace("washingtondc", "fayar");
 		}
-		if(location.equals("littlerock")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("littlerock")) {
 			URL = URL.replace("washingtondc", "littlerock");
 		}
-		if(location.equals("fortsmith")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("fortsmith")) {
 			URL = URL.replace("washingtondc", "fortsmith");
 		}
-		if(location.equals("santamaria")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("santamaria")) {
 			URL = URL.replace("washingtondc", "santamaria");
 		}
-		if(location.equals("santabarbara")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("santabarbara")) {
 			URL = URL.replace("washingtondc", "santabarbara");
 		}
-		if(location.equals("sfbay")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("san francisco bay")) {
 			URL = URL.replace("washingtondc", "sfbay");
 		}
-		if(location.equals("sacramento")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("sacramento")) {
 			URL = URL.replace("washingtondc", "sacramento");
 		}
-		if(location.equals("sandiego")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("sandiego")) {
 			URL = URL.replace("washingtondc", "sandiego");
 		}
-		if(location.equals("palmsprings")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("palmsprings")) {
 			URL = URL.replace("washingtondc", "palmsprings");
 		}
-		if(location.equals("orangecounty")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("orangecounty")) {
 			URL = URL.replace("washingtondc", "orangecounty");
 		}
-		if(location.equals("boulder")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("boulder")) {
 			URL = URL.replace("washingtondc", "boulder");
 		}
-		if(location.equals("denver")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("denver")) {
 			URL = URL.replace("washingtondc", "denver");
 		}
-		if(location.equals("cosprings")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("cosprings")) {
 			URL = URL.replace("washingtondc", "cosprings");
 		}
-		if(location.equals("hartford")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("hartford")) {
 			URL = URL.replace("washingtondc", "hartford");
 		}
-		if(location.equals("newhaven")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("newhaven")) {
 			URL = URL.replace("washingtondc", "newhaven");
 		}
-		if(location.equals("newlondon")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("newlondon")) {
 			URL = URL.replace("washingtondc", "newlondon");
 		}
-		if(location.equals("nwct")) {
-			URL = URL.replace("washingtondc", "nwct");
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("north western connecticut")) {
+			URL = URL.replace("washingtondc", "north western connecticut");
 		}
-		if(location.equals("delaware")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("delaware")) {
 			URL = URL.replace("washingtondc", "delaware");
 		}
-		if(location.equals("daytona")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("daytona")) {
 			URL = URL.replace("washingtondc", "daytona");
 		}
-		if(location.equals("keys")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("keys")) {
 			URL = URL.replace("washingtondc", "keys");
 		}
-		if(location.equals("miami")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("miami")) {
 			URL = URL.replace("washingtondc", "miami");
 		}
-		if(location.equals("orlando")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("orlando")) {
 			URL = URL.replace("washingtondc", "orlando");
 		}
-		if(location.equals("tallahassee")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("tallahassee")) {
 			URL = URL.replace("washingtondc", "tallahassee");
 		}
-		if(location.equals("tampa")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("tampa")) {
 			URL = URL.replace("washingtondc", "tampa");
 		}
-		if(location.equals("augusta")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("augusta")) {
 			URL = URL.replace("washingtondc", "augusta");
 		}
-		if(location.equals("savannah")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("savannah")) {
 			URL = URL.replace("washingtondc", "savannah");
 		}
-		if(location.equals("atlanta")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("atlanta")) {
 			URL = URL.replace("washingtondc", "atlanta");
 		}
-		if(location.equals("honolulu")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("honolulu")) {
 			URL = URL.replace("washingtondc", "honolulu");
 		}
-		if(location.equals("boise")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("boise")) {
 			URL = URL.replace("washingtondc", "boise");
 		}
-		if(location.equals("eastidaho")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("eastidaho")) {
 			URL = URL.replace("washingtondc", "eastidaho");
 		}
-		if(location.equals("bn")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("bloomington")) {
 			URL = URL.replace("washingtondc", "bn");
 		}
-		if(location.equals("chambana")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("champaign urbana")) {
 			URL = URL.replace("washingtondc", "chambana");
 		}
-		if(location.equals("chicago")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("chicago")) {
 			URL = URL.replace("washingtondc", "chicago");
 		}
-		if(location.equals("rockford")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("rockford")) {
 			URL = URL.replace("washingtondc", "rockford");
 		}
-		if(location.equals("springfieldil")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfield illinois")) {
 			URL = URL.replace("washingtondc", "springfieldil");
 		}
-		if(location.equals("iowacity")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("iowacity")) {
 			URL = URL.replace("washingtondc", "iowacity");
 		}
-		if(location.equals("siouxcity")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("siouxcity")) {
 			URL = URL.replace("washingtondc", "siouxcity");
 		}
-		if(location.equals("cedarrapids")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("cedarrapids")) {
 			URL = URL.replace("washingtondc", "cedarrapids");
 		}
-		if(location.equals("desmoines")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("desmoines")) {
 			URL = URL.replace("washingtondc", "desmoines");
 		}
-		if(location.equals("topeka")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("topeka")) {
 			URL = URL.replace("washingtondc", "topeka");
 		}
-		if(location.equals("wichita")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("wichita")) {
 			URL = URL.replace("washingtondc", "wichita");
 		}
-		if(location.equals("eastky")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("eastky")) {
 			URL = URL.replace("washingtondc", "eastky");
 		}
-		if(location.equals("louisville")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("louisville")) {
 			URL = URL.replace("washingtondc", "louisville");
 		}
-		if(location.equals("batonrouge")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("batonrouge")) {
 			URL = URL.replace("washingtondc", "batonrouge");
 		}
-		if(location.equals("cenla")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("central louisiana")) {
 			URL = URL.replace("washingtondc", "cenla");
 		}
-		if(location.equals("neworleans")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("neworleans")) {
 			URL = URL.replace("washingtondc", "neworleans");
 		}
-		if(location.equals("maine")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("maine")) {
 			URL = URL.replace("washingtondc", "maine");
 		}
-		if(location.equals("annapolis")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("annapolis")) {
 			URL = URL.replace("washingtondc", "annapolis");
 		}
-		if(location.equals("baltimore")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("baltimore")) {
 			URL = URL.replace("washingtondc", "baltimore");
 		}
-		if(location.equals("frederick")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("frederick")) {
 			URL = URL.replace("washingtondc", "frederick");
 		}
-		if(location.equals("boston")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("boston")) {
 			URL = URL.replace("washingtondc", "boston");
 		}
-		if(location.equals("lansing")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("lansing")) {
 			URL = URL.replace("washingtondc", "lansing");
 		}
-		if(location.equals("up")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("upper peninsula")) {
 			URL = URL.replace("washingtondc", "up");
 		}
-		if(location.equals("annarbor")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("annarbor")) {
 			URL = URL.replace("washingtondc", "annarbor");
 		}
-		if(location.equals("minneapolis")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("minneapolis")) {
 			URL = URL.replace("washingtondc", "minneapolis");
 		}
-		if(location.equals("rmn")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("rochester minnesota")) {
 			URL = URL.replace("washingtondc", "rmn");
 		}
-		if(location.equals("jackson")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("jackson")) {
 			URL = URL.replace("washingtondc", "jackson");
 		}
-		if(location.equals("columbiamo")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("columbiamo")) {
 			URL = URL.replace("washingtondc", "columbiamo");
 		}
-		if(location.equals("kansascity")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("kansascity")) {
 			URL = URL.replace("washingtondc", "kansascity");
 		}
-		if(location.equals("semo")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("southeast missouri")) {
 			URL = URL.replace("washingtondc", "semo");
 		}
-		if(location.equals("springfield")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfield")) {
 			URL = URL.replace("washingtondc", "springfield");
 		}
-		if(location.equals("stlouis")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("stlouis")) {
 			URL = URL.replace("washingtondc", "stlouis");
 		}
-		if(location.equals("lasvegas")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("lasvegas")) {
 			URL = URL.replace("washingtondc", "lasvegas");
 		}
-		if(location.equals("reno")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("reno")) {
 			URL = URL.replace("washingtondc", "reno");
 		}
-		if(location.equals("santafe")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("santafe")) {
 			URL = URL.replace("washingtondc", "santafe");
 		}
-		if(location.equals("albany")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("albany")) {
 			URL = URL.replace("washingtondc", "albany");
 		}
-		if(location.equals("buffalo")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("buffalo")) {
 			URL = URL.replace("washingtondc", "buffalo");
 		}
-		if(location.equals("newyork")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("newyork")) {
 			URL = URL.replace("washingtondc", "newyork");
 		}
-		if(location.equals("rochester")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("rochester new york")) {
 			URL = URL.replace("washingtondc", "rochester");
 		}
-		if(location.equals("asheville")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("asheville")) {
 			URL = URL.replace("washingtondc", "asheville");
 		}
-		if(location.equals("greensboro")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("greensboro")) {
 			URL = URL.replace("washingtondc", "greensboro");
 		}
-		if(location.equals("raleigh")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("raleigh")) {
 			URL = URL.replace("washingtondc", "raleigh");
 		}
-		if(location.equals("akroncanton")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("akron-canton")) {
 			URL = URL.replace("washingtondc", "akroncanton");
 		}
-		if(location.equals("cincinnati")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("cincinnati")) {
 			URL = URL.replace("washingtondc", "cincinnati");
 		}
-		if(location.equals("cleveland")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("cleveland")) {
 			URL = URL.replace("washingtondc", "cleveland");
 		}
-		if(location.equals("amarillo")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("amarillo")) {
 			URL = URL.replace("washingtondc", "amarillo");
 		}
-		if(location.equals("wichitafalls")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("wichitafalls")) {
 			URL = URL.replace("washingtondc", "wichitafalls");
 		}
-		if(location.equals("lubbock")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("lubbock")) {
 			URL = URL.replace("washingtondc", "lubbock");
 		}
-		if(location.equals("sanantonio")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("sanantonio")) {
 			URL = URL.replace("washingtondc", "sanantonio");
 		}
-		if(location.equals("dallas")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("dallas")) {
 			URL = URL.replace("washingtondc", "dallas");
 		}
-		if(location.equals("austin")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("austin")) {
 			URL = URL.replace("washingtondc", "austin");
 		}
 		
 			Document eBayData = Jsoup.connect(URL).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36").referrer("http://www.google.com").timeout(20000000).followRedirects(true).get();
-			Elements item_price = eBayData.select(".result-info");
-			for(Element price : item_price) {
+			//above line searches for the product
+			Elements item_price = eBayData.select(".result-info");//set the item_price to the html part for info 
+			for(Element price : item_price) {//searches through the elements
 				if(price.toString().contains("broken") || price.toString().toLowerCase().contains("for parts") || price.toString().toLowerCase().contains("parts")|| price.toString().toLowerCase().contains("defective")) {
-					continue;
+					continue; //if the products are broken, defective, or anything else like that ust continue
 				}
 				if(price.select(".result-price").text().replace("$", "").replace(",", "").equals("") || price.select(".result-price").text().replace("$", "").replace(",", "").equals("0") || price.select(".result-price").text().replace("$", "").replace(",", "").equals("1") || price.select(".result-price").text().replace("$", "").replace(",", "") == null) {
-					continue;
+					continue; //if the prices are not real, like 0, or no listed price, or 1, or null just continue 
 				}
 				if(Double.parseDouble(price.select(".result-price").text().replace("$", "").replace(",", "")) > max || Double.parseDouble(price.select(".result-price").text().replace("$", "").replace(",", "")) < min) {
-					continue;
+					continue;//if the price is greater than max or less than min just move on
 				}
-				Element title = price.select("a").first();
-				String name = title.select("a").first().text();
-				productsListings.add(name);
-				productsListings.add(price.select(".result-price").text().replace("$", "").replace(",", ""));
-				Element links = price.select("a").first();
-				String url = links.attr("href");
-				productsListings.add(url);
-				//personal
-				int i = 0;
-				while(i < productsListings.size() - 2) {
-					System.out.println(productsListings.get(i));
-					System.out.println(productsListings.get(i + 1));
-					System.out.println(productsListings.get(i + 2));
-					i = i + 1;
-				}
-				//personal
+				Element title = price.select("a").first();// the title is hidden in the href, so we have to dig through that
+				String name = title.select("a").first().text();//and the title is qeual to the text
+				productsListings.add(name);//add the name
+				productsListings.add(price.select(".result-price").text().replace("$", "").replace(",", ""));//add the price but as a string
+				Element links = price.select("a").first();//same steps for the link
+				String url = links.attr("href");//again same thing
+				productsListings.add(url);// and the link for the listing 
+			
 			}
 			return productsListings;
 		}
