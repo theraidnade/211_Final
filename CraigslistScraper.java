@@ -7,8 +7,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 // imports from jsoup and other files
+
+/**
+ * Class to scrape from craigslist.com
+ * @author Musa Hassan
+ * @version 1.00
+ */
+
 public class Craigslist {
 	//returns the cheapest item in a String array
+	
+	/**
+	 * Method to determine the cheapest item of every item found in the getItems method
+	 * @param listings - array list of String values that contains items pulled from getItems 
+	 * @return list of the cheapest item with name, price, and link in that order
+	 */
+	
 	public static String[] getLowest(List<String> listings) throws IOException {
 		if (listings.size() == 0 || listings == null) { //if the listings return as an empty list then just return null because their isn't a cheapest
 			return null;
@@ -24,6 +38,11 @@ public class Craigslist {
 		String[] returnArray = {listings.get(minimumIndex), listings.get(minimumIndex+1), listings.get(minimumIndex+2)}; //return String[] with everything
 		return returnArray;
 	}
+	/**
+	 * Method to determine the mean cost of every item found in the getItems method
+	 * @param listings - array list of String values that contains items pulled from  getItems 
+	 * @return double representing average of all craigslist items found
+	 */
 	public static double getAverage(List<String> listings) {//returns the average price for the item on this web-site
 		if (listings.size() == 0 || listings == null) {//if the listings aren't there then just return negative one
 			return -1;
@@ -38,6 +57,15 @@ public class Craigslist {
 		Average_Price = Temporary_Total/number_of_items; //average price
 		return Double.parseDouble(avgFormat.format(Average_Price)); //return double average
 	}
+	
+	/**
+	 * acutal method for the scraping from craigslist
+	 * @param keyword - String representing the item required
+	 * @param minPrice - int representing the cheapest. Assumed to be 0 if nothing is passed
+	 * @param maxPrice - int representing the maximum price for the item, assumed to be 0 then changed to Integer.MAX_VALUE
+	 * @return List<String> -ArrayList of string with the information for each item in the order Name, Price, Link 
+	 */
+	
 	public static List<String> getItems(String keyword, int min, int max, String location) throws IOException {
 		ArrayList<String> productsListings = new ArrayList<String>(); //to hold the product listings
 		keyword = keyword.replace(" ", "+"); //so that spaces are turned into plus signs for the URL
@@ -59,7 +87,7 @@ public class Craigslist {
 		} //the above if else statements and such are for the max prices. If they are both 0, then it doesn't matter. 
 		//if ones is 0 and one a number then the one that is a number is used while the other is ignored.
 		
-		if(location.replaceAll(" ", "").equalsIgnoreCase("locationnotlisted")) {//location URL
+		if(location.replaceAll(" ", "").equalsIgnoreCase("location not listed")) {//location URL
 			int q = 1;
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("montgomery")) {
@@ -92,7 +120,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("santabarbara")) {
 			URL = URL.replace("washingtondc", "santabarbara");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("sanfranciscobay")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("san francisco bay")) {
 			URL = URL.replace("washingtondc", "sfbay");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("sacramento")) {
@@ -125,7 +153,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("newlondon")) {
 			URL = URL.replace("washingtondc", "newlondon");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("northwesternconnecticut")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("north western connecticut")) {
 			URL = URL.replace("washingtondc", "north western connecticut");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("delaware")) {
@@ -170,7 +198,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("bloomington")) {
 			URL = URL.replace("washingtondc", "bn");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("champaignurbana")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("champaign urbana")) {
 			URL = URL.replace("washingtondc", "chambana");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("chicago")) {
@@ -179,7 +207,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("rockford")) {
 			URL = URL.replace("washingtondc", "rockford");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfieldillinois")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfield illinois")) {
 			URL = URL.replace("washingtondc", "springfieldil");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("iowacity")) {
@@ -209,7 +237,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("batonrouge")) {
 			URL = URL.replace("washingtondc", "batonrouge");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("centrallouisiana")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("central louisiana")) {
 			URL = URL.replace("washingtondc", "cenla");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("neworleans")) {
@@ -233,7 +261,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("lansing")) {
 			URL = URL.replace("washingtondc", "lansing");
 		}
-		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("upperpeninsula")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("upper peninsula")) {
 			URL = URL.replace("washingtondc", "up");
 		}
 		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("annarbor")) {
@@ -242,7 +270,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("minneapolis")) {
 			URL = URL.replace("washingtondc", "minneapolis");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("rochesterminnesota")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("rochester minnesota")) {
 			URL = URL.replace("washingtondc", "rmn");
 		}
 		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("jackson")) {
@@ -254,7 +282,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("kansascity")) {
 			URL = URL.replace("washingtondc", "kansascity");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("southeastmissouri")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("southeast missouri")) {
 			URL = URL.replace("washingtondc", "semo");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfield")) {
@@ -281,7 +309,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("newyork")) {
 			URL = URL.replace("washingtondc", "newyork");
 		}
-		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("rochesternewyork")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("rochester new york")) {
 			URL = URL.replace("washingtondc", "rochester");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("asheville")) {
