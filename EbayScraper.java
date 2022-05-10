@@ -25,7 +25,7 @@ public class Scraper {
 			
 			if (Double.parseDouble(deleteSpaceVar) < lowVal) {
 				minimumIndex = j;
-				lowVal = Double.parseDouble(listings.get(j+1)); //sets the lowest value for this
+				lowVal = Double.parseDouble(deleteSpaceVar); //sets the lowest value for this
 			}
 		}
 		String[] returnArray = {listings.get(minimumIndex), listings.get(minimumIndex+1), listings.get(minimumIndex+2)};
