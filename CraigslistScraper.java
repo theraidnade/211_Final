@@ -59,7 +59,7 @@ public class Craigslist {
 		} //the above if else statements and such are for the max prices. If they are both 0, then it doesn't matter. 
 		//if ones is 0 and one a number then the one that is a number is used while the other is ignored.
 		
-		if(location.replaceAll(" ", "").equalsIgnoreCase("location not listed")) {//location URL
+		if(location.replaceAll(" ", "").equalsIgnoreCase("locationnotlisted")) {//location URL
 			int q = 1;
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("montgomery")) {
@@ -92,7 +92,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("santabarbara")) {
 			URL = URL.replace("washingtondc", "santabarbara");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("san francisco bay")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("sanfranciscobay")) {
 			URL = URL.replace("washingtondc", "sfbay");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("sacramento")) {
@@ -125,7 +125,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("newlondon")) {
 			URL = URL.replace("washingtondc", "newlondon");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("north western connecticut")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("northwesternconnecticut")) {
 			URL = URL.replace("washingtondc", "north western connecticut");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("delaware")) {
@@ -170,7 +170,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("bloomington")) {
 			URL = URL.replace("washingtondc", "bn");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("champaign urbana")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("champaignurbana")) {
 			URL = URL.replace("washingtondc", "chambana");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("chicago")) {
@@ -179,7 +179,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("rockford")) {
 			URL = URL.replace("washingtondc", "rockford");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfield illinois")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfieldillinois")) {
 			URL = URL.replace("washingtondc", "springfieldil");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("iowacity")) {
@@ -209,7 +209,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("batonrouge")) {
 			URL = URL.replace("washingtondc", "batonrouge");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("central louisiana")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("centrallouisiana")) {
 			URL = URL.replace("washingtondc", "cenla");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("neworleans")) {
@@ -233,7 +233,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("lansing")) {
 			URL = URL.replace("washingtondc", "lansing");
 		}
-		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("upper peninsula")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("upperpeninsula")) {
 			URL = URL.replace("washingtondc", "up");
 		}
 		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("annarbor")) {
@@ -242,7 +242,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("minneapolis")) {
 			URL = URL.replace("washingtondc", "minneapolis");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("rochester minnesota")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("rochesterminnesota")) {
 			URL = URL.replace("washingtondc", "rmn");
 		}
 		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("jackson")) {
@@ -254,7 +254,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("kansascity")) {
 			URL = URL.replace("washingtondc", "kansascity");
 		}
-		else if(location.replaceAll(" ", "").equalsIgnoreCase("southeast missouri")) {
+		else if(location.replaceAll(" ", "").equalsIgnoreCase("southeastmissouri")) {
 			URL = URL.replace("washingtondc", "semo");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("springfield")) {
@@ -281,7 +281,7 @@ public class Craigslist {
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("newyork")) {
 			URL = URL.replace("washingtondc", "newyork");
 		}
-		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("rochester new york")) {
+		else 	if(location.replaceAll(" ", "").equalsIgnoreCase("rochesternewyork")) {
 			URL = URL.replace("washingtondc", "rochester");
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("asheville")) {
