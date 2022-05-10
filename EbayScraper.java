@@ -7,7 +7,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
+/**
+ * Class to scrape from eBay.com
+ * @author Musa Hassan
+ * @version 1.00
+ */
 public class Scraper {
+	
+	/**
+	 * Method to determine the mean cost of every item found in the getItems method
+	 * @param listings - array list of String values that contains items pulled from  getItems 
+	 * @return double representing average of all eBay items found
+	 */
+	
+	
 	public static String[] getLowest(List<String> listings) throws IOException {//does the same exact things as the craigslist one
 		if (listings.size() == 0 || listings == null) {//return nothing if the list is empty
 			return null;
@@ -28,9 +41,22 @@ public class Scraper {
 				lowVal = Double.parseDouble(deleteSpaceVar); //sets the lowest value for this
 			}
 		}
-		String[] returnArray = {listings.get(minimumIndex), listings.get(minimumIndex+1), listings.get(minimumIndex+2)};
+		String[] returnArray;
+		returnArray = new String[3];
+		returnArray[0] = listings.get(minimumIndex);
+		returnArray[1] = listings.get(minimumIndex + 1);
+		returnArray[2] = listings.get(minimumIndex + 2);
+		System.out.println(returnArray[2]);
+		System.out.println(returnArray);
 		return returnArray; //return
 	}
+	
+	/**
+	 * Method to determine the cheapest item of every item found in the getItems method
+	 * @param listings - array list of String values that contains items pulled from  getItems 
+	 * @return list of the cheapest item with name, price, and link in that order
+	 */
+	
 	public static double getAverage(List<String> listings) {//same average method as the craigslist one 
 		if (listings.size() == 0 || listings == null) {// return null for unimportant lists
 			return -1;
@@ -51,6 +77,14 @@ public class Scraper {
 		Average_Price = Temporary_Total/number_of_items;
 		return Double.parseDouble(avgFormat.format(Average_Price));
 	}
+	
+	/**
+	 * acutal method for the scraping from eBay
+	 * @param keyword - String representing the item required
+	 * @param minPrice - int representing the cheapest. Assumed to be 0 if nothing is passed
+	 * @param maxPrice - int representing the maximum price for the item, assumed to be 0 then changed to Integer.MAX_VALUE
+	 * @return List<String> -ArrayList of string with the information for each item in the order Name, Price, Link 
+	 */
 	
 	public static ArrayList<String> getItems(String keyword, int min, int max) throws IOException{//main scraper
 		ArrayList<String> productsListings = new ArrayList<String>();//product listings
@@ -74,16 +108,27 @@ public class Scraper {
 			}
 			Document eBayData = Jsoup.connect(URL).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36").referrer("http://www.google.com").timeout(20000000).followRedirects(true).get();
 			Elements item_price = eBayData.select(".s-item__info.clearfix");//above line does the search and this line has the data
+			String delete_var;
 			for(Element price : item_price) {//search through
 				if(price.toString().contains("Shop on eBay")) {
 					continue;// if it has that on it skip it because it is filler every time
 				}
 				productsListings.add(price.select(".s-item__title").text());//find the title
 				if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("Free shipping")) {//if shipping is free
+					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" ")) {
+						delete_var = price.select(".s-item__price").text().replace("$", "").replace(",", "");
+						productsListings.add(delete_var.substring(0, delete_var.indexOf(" ")));
+					}else {
 					productsListings.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));//delete the commmas and such and add the price
-				}
+					}
+					}
 				else if(price.select(".s-item__shipping.s-item__logisticsCost").text().equals("")) {//if it is an empty shipping cost then add the price
+					if(price.select(".s-item__price").text().replace("$", "").replace(",", "").contains(" ")) {
+						delete_var = price.select(".s-item__price").text().replace("$", "").replace(",", "");
+						productsListings.add(delete_var.substring(0, delete_var.indexOf(" ")));
+					}else {
 					productsListings.add(price.select(".s-item__price").text().replace("$", "").replace(",", ""));
+					}
 				}
 				else {//if there is a shipping cost then add it but make sure to change a lot of stuff like commas. dollar signs, etc
 					String post = price.select(".s-item__shipping.s-item__logisticsCost").text().replace("+$", "").replace(",", "");
@@ -104,7 +149,15 @@ public class Scraper {
 				String url = links.attr("href");
 				productsListings.add(url);
 			}	
+			for(Object listing : productsListings) {
+				System.out.println(listing);
+			}
 			return productsListings; //return list
+	}
+	public static void main(String[] args) throws IOException {
+		getItems("Iphone", 0, 0);
+		System.out.println(getAverage(getItems("iphone", 0, 0)));
+		
 	}
 	
 }
