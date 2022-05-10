@@ -14,8 +14,10 @@ public class Scraper {
 		}
 		double lowVal = Double.MAX_VALUE; //sets to max so the first listing is equal to 0
 		int minimumIndex = 0; //min is 0 
+		String deleteSpaceVar;
 		for (int j = 0; j < listings.size(); j = j+3) {//for loop to find the cheapest one 
-			if (Double.parseDouble(listings.get(j+1)) < lowVal) {
+			deleteSpaceVar = listings.get(j+1).substring(0, listings.get(j+1).indexOf(" "));
+			if (Double.parseDouble(deleteSpaceVar) < lowVal) {
 				minimumIndex = j;
 				lowVal = Double.parseDouble(listings.get(j+1)); //sets the lowest value for this
 			}
