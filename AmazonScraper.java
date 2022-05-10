@@ -145,7 +145,7 @@ public class AmazonScraper {
 		return productList;
 	}
 	
-//	Main method used for personal testing
+//	Main method used for personal testing.
 //	public static void main(String[] args) {
 //		List<String> tempList = getItems("cheese", 2, 2000);
 //		System.out.println(tempList);
