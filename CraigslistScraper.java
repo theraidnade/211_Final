@@ -88,7 +88,7 @@ public class Craigslist {
 		//if ones is 0 and one a number then the one that is a number is used while the other is ignored.
 		
 		if(location.replaceAll(" ", "").equalsIgnoreCase("location not listed")) {//location URL
-			int q = 1;
+			;
 		}
 		else if(location.replaceAll(" ", "").equalsIgnoreCase("montgomery")) {
 			URL = URL.replace("washingtondc", "montgomery");
