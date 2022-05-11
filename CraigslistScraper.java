@@ -14,7 +14,7 @@ import org.jsoup.select.Elements;
  * @version 1.00
  */
 
-public class Craigslist {
+public class CraigslistScraper {
 	//returns the cheapest item in a String array
 	
 	/**
